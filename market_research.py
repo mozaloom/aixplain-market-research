@@ -2,13 +2,6 @@
 """
 Multi-Agent Market Research System
 A sophisticated market research system using aiXplain SDK with 5 specialized agents.
-
-CRITICAL FIXES APPLIED:
-1. Removed AgentTask and dependencies (not supported in current SDK)
-2. Fixed agent creation parameters and deployment
-3. Corrected team agent creation
-4. Fixed result handling and error management
-5. Added proper model/tool IDs validation
 """
 
 import os
