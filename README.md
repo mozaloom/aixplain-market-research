@@ -4,11 +4,11 @@ A sophisticated market research system using the aiXplain SDK with 5 specialized
 
 ## Features
 
-🔍 **Web Research Agent** - Scrapes competitor websites and documentation  
-💭 **Sentiment Analysis Agent** - Analyzes customer reviews and feedback  
-⚙️ **Feature Extraction Agent** - Categorizes product features and capabilities  
-📊 **Competitive Intelligence Agent** - Compares against market standards  
-📋 **Report Generator Agent** - Creates executive summaries with actionable insights  
+**Web Research Agent** - Scrapes competitor websites and documentation  
+**Sentiment Analysis Agent** - Analyzes customer reviews and feedback  
+**Feature Extraction Agent** - Categorizes product features and capabilities  
+**Competitive Intelligence Agent** - Compares against market standards  
+**Report Generator Agent** - Creates executive summaries with actionable insights  
 
 ## Quick Start
 
@@ -20,7 +20,7 @@ A sophisticated market research system using the aiXplain SDK with 5 specialized
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/aixplain-market-research.git
+git clone https://github.com/mozaloom/aixplain-market-research.git
 cd aixplain-market-research
 
 # Install dependencies
@@ -82,10 +82,6 @@ The system can be customized through:
 - Industry context specification
 - Output format preferences (JSON/Markdown)
 - Custom agent instructions
-
-## Examples
-
-See `example_usage.py` for a complete working example.
 
 ## License
 

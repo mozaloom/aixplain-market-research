@@ -125,7 +125,7 @@ class MarketResearchSystem:
             llm_id="67fd9d6aef0365783d06e2ee"
         )
         
-    def analyze_competitor(self, product_name: str, industry: str = "", depth: str = "detailed") -> Dict[str, Any]:
+    def analyze_competitor(self, product_name: str, industry: str = "", depth: str = "detailed"):
         """Main analysis method."""
         if not self.team_agent:
             raise ValueError("Team not initialized. Call setup_agents() first.")
@@ -143,7 +143,7 @@ Complete tasks: 1) Web research 2) Sentiment analysis 3) Feature extraction 4) C
                 max_iterations=25,
                 timeout=600
             )
-            return result  # Return the AgentResponseData object directly
+            return result
         except Exception as e:
             return {"error": str(e), "status": "failed"}
     
@@ -151,33 +151,34 @@ Complete tasks: 1) Web research 2) Sentiment analysis 3) Feature extraction 4) C
         """Format and save analysis results."""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
-        # Handle error case (dict)
-        if isinstance(results, dict) and "error" in results:
-            report = f"""# Market Research Analysis - Error
-**Generated:** {timestamp}
-
-**Error:** {results['error']}
-"""
         # Handle AgentResponseData object
-        elif hasattr(results, 'data'):
-            data = results.data
-            output_content = data.get('output', 'Analysis completed') if isinstance(data, dict) else str(data)
-            session_id = data.get('session_id', 'N/A') if isinstance(data, dict) else 'N/A'
-            steps = len(data.get('intermediate_steps', [])) if isinstance(data, dict) else 0
-            
+        if hasattr(results, 'data') and results.data:
+            output_content = results.data
             report = f"""# Market Research Analysis Report
 **Generated:** {timestamp}
 
 {output_content}
 
 ---
-**Metadata:** Session {session_id} | {steps} steps
+**Metadata:** Analysis completed successfully
+"""
+        elif isinstance(results, dict) and "error" in results:
+            report = f"""# Market Research Analysis - Error
+**Generated:** {timestamp}
+
+**Error:** {results['error']}
+
+**Debug Info:** {results.get('raw_result', 'No additional info')}
 """
         else:
+            # Fallback for other cases
             report = f"""# Market Research Analysis Report
 **Generated:** {timestamp}
 
 {str(results)}
+
+---
+**Metadata:** Analysis completed
 """
         
         if output_file:
@@ -213,13 +214,6 @@ def main():
     print("⏳ Processing (may take 5-10 minutes)...\n")
     
     results = system.analyze_competitor(args.product, args.industry, args.depth)
-    
-    # Debug: Print results structure
-    print(f"\n🔍 Debug - Results type: {type(results)}")
-    if hasattr(results, 'data'):
-        print(f"🔍 Debug - Has data attribute: {type(results.data)}")
-    else:
-        print(f"🔍 Debug - Results keys: {list(results.keys()) if isinstance(results, dict) else 'Not a dict'}")
     
     output_file = args.output or f"analysis_{args.product.replace(' ', '_').lower()}_{datetime.now().strftime('%Y%m%d_%H%M')}.md"
     report = system.generate_report(results, output_file)
