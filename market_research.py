@@ -245,72 +245,6 @@ Please coordinate between all agents to ensure comprehensive coverage of all ana
                 "timestamp": datetime.now().isoformat()
             }
     
-    def _clean_content(self, raw_content: str) -> str:
-        """Carefully extract clean analysis content from raw result."""
-        if not raw_content:
-            return ""
-        
-        content = str(raw_content)
-        
-        # Step 1: Remove AgentResponseData wrapper if present
-        if content.startswith('AgentResponseData('):
-            # Find the output= section
-            output_start = content.find('output=')
-            if output_start != -1:
-                # Extract everything after 'output='
-                content = content[output_start + 7:]
-                
-                # Step 2: Remove trailing technical metadata
-                # Look for session_id, intermediate_steps, etc.
-                end_markers = [', session_id=', ', intermediate_steps=', ', input={']
-                for marker in end_markers:
-                    if marker in content:
-                        content = content[:content.find(marker)]
-                        break
-        
-        # Step 3: Clean up formatting artifacts
-        content = content.strip()
-        
-        # Remove leading/trailing quotes if they wrap the entire content
-        if content.startswith('"') and content.endswith('"'):
-            content = content[1:-1]
-        if content.startswith("'") and content.endswith("'"):
-            content = content[1:-1]
-        
-        # Step 4: Remove any remaining technical artifacts
-        # Remove lines that look like technical metadata
-        lines = content.split('\n')
-        clean_lines = []
-        
-        for line in lines:
-            line = line.strip()
-            # Skip lines that are clearly technical metadata
-            if any(skip_pattern in line.lower() for skip_pattern in [
-                'agentresponsedata(',
-                'session_id=',
-                'intermediate_steps=',
-                'input={',
-                'output=',
-                'chat_history=',
-                'outputformat=',
-                'expectedoutput='
-            ]):
-                continue
-            
-            # Keep the line if it's not technical metadata
-            if line:
-                clean_lines.append(line)
-        
-        # Step 5: Rejoin and final cleanup
-        content = '\n'.join(clean_lines)
-        
-        # Remove any remaining escape characters
-        content = content.replace('\\n', '\n')
-        content = content.replace('\\\'', '\'')
-        content = content.replace('\\"', '"')
-        
-        return content.strip()
-    
     def generate_report(self, results: Dict[str, Any], output_file: Optional[str] = None) -> str:
         """Format and save analysis results."""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -319,42 +253,44 @@ Please coordinate between all agents to ensure comprehensive coverage of all ana
             # Handle successful results
             result_obj = results["result"]
             
-            # Extract raw content based on result type
-            raw_content = ""
-            if hasattr(result_obj, 'output') and result_obj.output:
-                raw_content = str(result_obj.output)
-            elif hasattr(result_obj, 'data') and result_obj.data:
-                raw_content = str(result_obj.data)
+            # Extract content based on result type
+            if hasattr(result_obj, 'data'):
+                content = str(result_obj.data)
             elif isinstance(result_obj, dict):
-                raw_content = result_obj.get('output', result_obj.get('data', str(result_obj)))
+                content = result_obj.get('output', str(result_obj))
             else:
-                raw_content = str(result_obj)
+                content = str(result_obj)
             
-            # Clean the content carefully
-            clean_content = self._clean_content(raw_content)
-            
-            if clean_content and len(clean_content) > 50:  # Ensure we have substantial content
-                report = f"""# Market Research Analysis Report
+            # Clean and format the content
+            if content:
+                report = f"""# 🔍 Market Research Analysis Report
 
 **Generated:** {timestamp}
+**Status:** ✅ Analysis Completed Successfully
 
 ---
 
-{clean_content}
+{content}
 
 ---
 
-*Analysis completed successfully*
+**Analysis Metadata:**
+- Processing Status: Completed Successfully
+- Generated: {timestamp}
+- Analysis Framework: Multi-Agent aiXplain System
 """
             else:
-                report = f"""# Market Research Analysis Report
+                report = f"""# 🔍 Market Research Analysis Report
 
 **Generated:** {timestamp}
 **Status:** ⚠️ Analysis Completed with Limited Data
 
-**Note:** The analysis completed but returned limited readable content.
+**Note:** The analysis completed but returned limited data. This may indicate:
+- Limited public information available for the analyzed product
+- Rate limiting or API restrictions
+- Need for more specific search terms
 
-**Debug Info:** Content length: {len(clean_content)} characters
+**Raw Result:** {str(result_obj)[:1000]}...
 
 ---
 **Metadata:** Analysis completed with limited results
@@ -464,10 +400,10 @@ Environment Variables:
         print("📈 MARKET RESEARCH ANALYSIS COMPLETE")
         print("="*80)
         
-        # Show a clean preview of the report
-        preview_length = 2000
+        # Show first 1500 characters of the report
+        preview_length = 1500
         if len(report) > preview_length:
-            print(report[:preview_length] + "\n\n... [Full report saved to file] ...")
+            print(report[:preview_length] + "\n\n... [Report continues in file] ...")
         else:
             print(report)
         
