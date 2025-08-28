@@ -1,88 +1,129 @@
-# Multi-Agent Market Research System
+# AI Market Research System
 
-A sophisticated market research system using the aiXplain SDK with 5 specialized agents for comprehensive competitor analysis.
+**Analyze any competitor in minutes using AI agents**
 
-## Features
+This system uses 5 AI agents to automatically research competitors and generate professional market analysis reports.
 
-**Web Research Agent** - Scrapes competitor websites and documentation  
-**Sentiment Analysis Agent** - Analyzes customer reviews and feedback  
-**Feature Extraction Agent** - Categorizes product features and capabilities  
-**Competitive Intelligence Agent** - Compares against market standards  
-**Report Generator Agent** - Creates executive summaries with actionable insights  
+## Quick Start (3 steps)
 
-## Quick Start
-
-### Prerequisites
-- Python 3.8+
-- aiXplain SDK account and API key
-
-### Installation
-
+### 1. Install
 ```bash
-# Clone the repository
-git clone https://github.com/mozaloom/aixplain-market-research.git
-cd aixplain-market-research
-
-# Install dependencies
 pip install aixplain
+```
 
+### 2. Get API Key
+- Go to [aiXplain Platform](https://platform.aixplain.com/)
+- Sign up for free account
+- Copy your API key
+
+### 3. Run Analysis
+```bash
 # Set your API key
 export TEAM_API_KEY="your_api_key_here"
+
+# Analyze any competitor
+python market_research.py --product "Slack"
 ```
 
-### Basic Usage
+**That's it!** The system will generate a complete market research report in 5-10 minutes.
+
+## What You Get
+
+The AI system automatically creates:
+
+- **Company Background** - Business details and market position  
+- **Product Features** - Complete feature analysis and categorization  
+- **Customer Sentiment** - Reviews analysis from multiple sources  
+- **Competitive Intelligence** - Strengths, weaknesses, opportunities  
+- **Executive Summary** - Key insights and actionable recommendations  
+
+## Usage Examples
 
 ```bash
-# Analyze a competitor product
-python market_research_agent.py --product "Competitor Product Name" --industry "SaaS" --depth detailed --output report.json
+# Basic analysis
+python market_research.py --product "Zoom"
 
-# Example with Slack
-python market_research_agent.py --product "Slack" --industry "Business Communication" --depth detailed
+# With industry context
+python market_research.py --product "Salesforce" --industry "CRM"
+
+# Save to specific file
+python market_research.py --product "Notion" --output my_report.md
+
+# Quick analysis
+python market_research.py --product "Airtable" --depth basic
 ```
 
-### Python API Usage
+## How It Works
 
-```python
-from market_research_agent import MarketResearchSystem
+The system uses 5 specialized AI agents:
 
-# Initialize system
-system = MarketResearchSystem("your_api_key")
-system.setup_agents()
-system.create_team()
+1. **Web Research Agent** - Finds company and product information
+2. **Sentiment Agent** - Analyzes customer reviews and feedback  
+3. **Feature Agent** - Extracts and categorizes product features
+4. **Intelligence Agent** - Performs competitive analysis
+5. **Report Agent** - Creates executive summary with insights
 
-# Run analysis
-results = system.analyze_competitor("Product Name", "Industry", "detailed")
-report = system.generate_report(results, "output.md")
+## Command Options
+
+| Option | Description | Example |
+|--------|-------------|----------|
+| `--product` | Product/company to analyze | `"Slack"` |
+| `--industry` | Industry context (optional) | `"SaaS"` |
+| `--depth` | Analysis level | `basic` or `detailed` |
+| `--output` | Save location | `report.md` |
+| `--api-key` | Your aiXplain API key | Alternative to env var |
+
+## Troubleshooting
+
+**"API key required" error**
+```bash
+# Set your API key first
+export TEAM_API_KEY="your_key_here"
 ```
 
-## System Architecture
+**"Agent creation error"**
+- Check your API key is valid
+- Ensure you have credits in your aiXplain account
 
-The system uses 5 specialized agents working in coordination:
+**Analysis takes too long**
+- Try `--depth basic` for faster results
+- Some products may have limited public information
 
-1. **Web Research Agent** - Gathers product information from official sources
-2. **Sentiment Analysis Agent** - Analyzes customer feedback and reviews
-3. **Feature Extraction Agent** - Identifies and categorizes product capabilities
-4. **Competitive Intelligence Agent** - Performs market positioning analysis
-5. **Report Generator Agent** - Synthesizes findings into actionable insights
+## Tips
 
-## Output Format
+- Use specific product names ("Slack" not "messaging app")
+- Add industry context for better analysis
+- Reports are saved automatically with timestamps
+- Analysis typically takes 5-15 minutes
 
-The system generates comprehensive reports including:
-- Sentiment scores with confidence metrics
-- Feature comparison matrix
-- Market position analysis
-- Competitive gaps and opportunities
-- Executive summary with 3-5 key insights
-- Raw data exports for further analysis
+## Sample Report
 
-## Configuration
+The system generates professional reports like this:
 
-The system can be customized through:
-- Analysis depth levels (basic/detailed)
-- Industry context specification
-- Output format preferences (JSON/Markdown)
-- Custom agent instructions
+```markdown
+# Market Research Analysis Report
 
-## License
+## Company Background
+[Detailed company information]
 
-MIT License - see LICENSE file for details.
+## Product Features
+- Core Features: [List]
+- Advanced Features: [List] 
+- Unique Capabilities: [List]
+
+## Customer Sentiment
+- Overall Score: 8.2/10
+- Key Themes: [Analysis]
+
+## Competitive Intelligence
+- Strengths: [List]
+- Weaknesses: [List]
+- Opportunities: [List]
+
+## Executive Summary
+[3-5 key strategic insights]
+```
+
+---
+
+**Need help?** Check the [aiXplain documentation](https://docs.aixplain.com/) or open an issue.
