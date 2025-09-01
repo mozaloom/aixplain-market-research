@@ -1,2 +1,6 @@
 aixplain
-requests
+fastapi
+uvicorn[standard]
+pydantic
+markdown
+weasyprint

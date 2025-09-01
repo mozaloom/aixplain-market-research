@@ -39,6 +39,7 @@ The AI system automatically creates:
 
 ## Usage Examples
 
+### Command Line Analysis
 ```bash
 # Basic analysis
 python market_research.py --product "Zoom"
@@ -53,6 +54,22 @@ python market_research.py --product "Notion" --output my_report.md
 python market_research.py --product "Airtable" --depth basic
 ```
 
+### React Web Interface
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+```
+
+**Web Interface Features:**
+- Clean, modern UI with real-time agent status
+- Form-based competitor analysis input
+- Visual progress tracking of AI agents
+- Interactive results dashboard
+- One-click report download
+
 ## How It Works
 
 The system uses 5 specialized AI agents:
@@ -63,6 +80,10 @@ The system uses 5 specialized AI agents:
 4. **Intelligence Agent** - Performs competitive analysis
 5. **Report Agent** - Creates executive summary with insights
 
+### Two Modes Available:
+- **Command Line**: Generate complete reports via Python script
+- **Web Interface**: Interactive React UI with real-time progress
+
 ## Command Options
 
 | Option | Description | Example |
@@ -72,6 +93,30 @@ The system uses 5 specialized AI agents:
 | `--depth` | Analysis level | `basic` or `detailed` |
 | `--output` | Save location | `report.md` |
 | `--api-key` | Your aiXplain API key | Alternative to env var |
+
+## Web Interface
+
+The React UI provides:
+- **Modern Design** - Clean, professional interface
+- **Real-time Status** - Live agent progress tracking  
+- **Interactive Forms** - Easy competitor input
+- **Visual Results** - Charts and metrics dashboard
+- **Export Options** - Download reports in multiple formats
+
+### Running the Web Interface
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Start FastAPI (Terminal 1)
+python api.py
+
+# Install React dependencies (Terminal 2)
+npm install
+
+# Start React app (opens http://localhost:3000)
+npm start
+```
 
 ## Troubleshooting
 

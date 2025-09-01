@@ -245,6 +245,50 @@ Please coordinate between all agents to ensure comprehensive coverage of all ana
                 "timestamp": datetime.now().isoformat()
             }
     
+    def _extract_clean_content(self, raw_content: str) -> str:
+        """Extract clean analysis content from raw agent response."""
+        # Look for the actual analysis content after 'output=' pattern
+        if 'output=' in raw_content:
+            # Find the start of the actual analysis
+            start_patterns = [
+                'output=# Executive Summary:',
+                'output=# Market Research Analysis',
+                'output=## Executive Summary',
+                'output=## Key Strategic Insights'
+            ]
+            
+            for pattern in start_patterns:
+                if pattern in raw_content:
+                    start_idx = raw_content.find(pattern) + len('output=')
+                    break
+            else:
+                # Fallback: look for any content after 'output='
+                output_idx = raw_content.find('output=')
+                if output_idx != -1:
+                    start_idx = output_idx + len('output=')
+                else:
+                    return raw_content
+            
+            # Find the end of the analysis (before session_id or other metadata)
+            end_patterns = [', session_id=', ', intermediate_steps=']
+            end_idx = len(raw_content)
+            
+            for pattern in end_patterns:
+                pattern_idx = raw_content.find(pattern, start_idx)
+                if pattern_idx != -1:
+                    end_idx = pattern_idx
+                    break
+            
+            # Extract and clean the content
+            clean_content = raw_content[start_idx:end_idx].strip()
+            
+            # Remove any trailing metadata patterns
+            clean_content = re.sub(r'This report synthesizes.*$', '', clean_content, flags=re.DOTALL)
+            
+            return clean_content.strip()
+        
+        return raw_content
+    
     def generate_report(self, results: Dict[str, Any], output_file: Optional[str] = None) -> str:
         """Format and save analysis results."""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -255,14 +299,17 @@ Please coordinate between all agents to ensure comprehensive coverage of all ana
             
             # Extract content based on result type
             if hasattr(result_obj, 'data'):
-                content = str(result_obj.data)
+                raw_content = str(result_obj.data)
             elif isinstance(result_obj, dict):
-                content = result_obj.get('output', str(result_obj))
+                raw_content = result_obj.get('output', str(result_obj))
             else:
-                content = str(result_obj)
+                raw_content = str(result_obj)
             
-            # Clean and format the content
-            if content:
+            # Clean the content to remove agent metadata
+            clean_content = self._extract_clean_content(raw_content)
+            
+            # Format the final report
+            if clean_content and len(clean_content) > 100:  # Ensure we have substantial content
                 report = f"""# 🔍 Market Research Analysis Report
 
 **Generated:** {timestamp}
@@ -270,14 +317,11 @@ Please coordinate between all agents to ensure comprehensive coverage of all ana
 
 ---
 
-{content}
+{clean_content}
 
 ---
 
-**Analysis Metadata:**
-- Processing Status: Completed Successfully
-- Generated: {timestamp}
-- Analysis Framework: Multi-Agent aiXplain System
+*Analysis completed using Multi-Agent aiXplain System*
 """
             else:
                 report = f"""# 🔍 Market Research Analysis Report
@@ -290,7 +334,8 @@ Please coordinate between all agents to ensure comprehensive coverage of all ana
 - Rate limiting or API restrictions
 - Need for more specific search terms
 
-**Raw Result:** {str(result_obj)[:1000]}...
+**Available Content:**
+{clean_content or 'No clean content extracted'}
 
 ---
 **Metadata:** Analysis completed with limited results
