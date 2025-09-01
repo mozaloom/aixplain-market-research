@@ -169,6 +169,33 @@ The system generates professional reports like this:
 [3-5 key strategic insights]
 ```
 
+## Deployment
+
+### Deploy to AWS Amplify
+
+**Quick deployment:**
+```bash
+# Automated deployment
+./deploy.sh
+```
+
+**Manual steps:**
+1. Deploy backend: `sam build && sam deploy --guided`
+2. Update `.env.production` with API Gateway URL
+3. Push to GitHub and connect to Amplify Console
+4. Deploy frontend automatically
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+
+### Local Development
+```bash
+# Backend (Terminal 1)
+python api.py
+
+# Frontend (Terminal 2)
+npm start
+```
+
 ---
 
 **Need help?** Check the [aiXplain documentation](https://docs.aixplain.com/) or open an issue.

@@ -10,9 +10,11 @@ const App = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState(null);
 
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
   const downloadReport = async (format) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/download/${format}`, {
+      const response = await fetch(`${API_BASE_URL}/api/download/${format}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +43,7 @@ const App = () => {
     setIsAnalyzing(true);
     
     try {
-      const response = await fetch('http://localhost:8000/api/analyze', {
+      const response = await fetch(`${API_BASE_URL}/api/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

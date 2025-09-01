@@ -4,3 +4,5 @@ uvicorn[standard]
 pydantic
 markdown
 weasyprint
+mangum
+reportlab
