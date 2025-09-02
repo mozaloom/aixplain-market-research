@@ -2,7 +2,7 @@
 """
 FastAPI backend for Market Research React UI
 """
-
+from mangum import Mangum
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -20,10 +20,17 @@ import os
 import re
 
 app = FastAPI(title="Market Research API")
+handler = Mangum(app, lifespan="off")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",  # Local development
+        "https://*.amazonaws.com",  # AWS domains
+        "https://*.cloudfront.net",  # CloudFront domains
+        # Add your frontend domain here, e.g.:
+        # "https://your-frontend-domain.com"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

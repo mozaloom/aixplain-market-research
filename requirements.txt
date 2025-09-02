@@ -1,8 +1,12 @@
+# Core application dependencies
 aixplain
 fastapi
 uvicorn[standard]
 pydantic
 markdown
-weasyprint
-mangum
 reportlab
+mangum
+
+# Additional Lambda-specific dependencies
+aws-lambda-powertools
+boto3
