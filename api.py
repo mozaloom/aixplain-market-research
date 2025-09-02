@@ -26,10 +26,10 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",  # Local development
+        "https://*.amplifyapp.com",  # AWS Amplify domains
         "https://*.amazonaws.com",  # AWS domains
         "https://*.cloudfront.net",  # CloudFront domains
-        # Add your frontend domain here, e.g.:
-        # "https://your-frontend-domain.com"
+        "https://main.d1lnp7miiwrzlm.amplifyapp.com",  # Production frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],
