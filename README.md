@@ -2,7 +2,7 @@
 
 **Analyze any competitor in minutes using AI agents**
 
-This system uses 5 AI agents to automatically research competitors and generate professional market analysis reports.
+This system uses 5 AI agents to automatically research competitors and generate professional market analysis reports. 
 
 ## Quick Start (3 steps)
 
