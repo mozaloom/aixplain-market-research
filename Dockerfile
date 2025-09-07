@@ -5,7 +5,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
-COPY api.py market_research_advanced.py ./
+COPY api.py agent.py tools.py ./
 
 # Set the handler
 CMD ["api.handler"]
