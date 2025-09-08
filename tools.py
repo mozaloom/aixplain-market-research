@@ -58,8 +58,8 @@ except ImportError:
     print("⚠️  Warning: reportlab not installed. PDF generation fallback available.")
 
 
-# Global configuration
-STORAGE_DIR = os.getenv("MARKET_RESEARCH_STORAGE", "generated_reports")
+# Global configuration - use /tmp for Lambda
+STORAGE_DIR = os.getenv("MARKET_RESEARCH_STORAGE", "/tmp/generated_reports")
 JOBS_DIR = os.path.join(STORAGE_DIR, "jobs")
 
 # Ensure directories exist

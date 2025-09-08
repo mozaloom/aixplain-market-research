@@ -6,6 +6,7 @@ pydantic
 markdown
 reportlab
 mangum
+markdown2
 
 # Additional Lambda-specific dependencies
 aws-lambda-powertools

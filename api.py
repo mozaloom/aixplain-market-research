@@ -54,9 +54,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel, Field
 import uvicorn
+from mangum import Mangum
 
 # Import our custom modules
-from agent import MarketResearchAgent
+# Note: MarketResearchAgent imported dynamically to avoid API key requirement
 from tools import (
     render_markdown, markdown_to_pdf, save_job, load_job, list_jobs,
     generate_job_id, sanitize_filename, generate_timestamp,
@@ -97,6 +98,7 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
+handler = Mangum(app)
 
 # CORS configuration
 app.add_middleware(
@@ -514,8 +516,11 @@ async def run_analysis_async(job_id: str, target: str, mode: str, api_key: str):
         job_store[job_id]["status"] = "running"
         job_store[job_id]["progress"]["stage"] = "creating_agents"
         
-        # Initialize agent
+        # Initialize agent (import here to use provided API key)
         print(f"🤖 Initializing Market Research Agent for {target}")
+        import os
+        os.environ['TEAM_API_KEY'] = api_key
+        from agent import MarketResearchAgent
         agent = MarketResearchAgent(target=target, mode=mode, api_key=api_key)
         
         # Update progress
