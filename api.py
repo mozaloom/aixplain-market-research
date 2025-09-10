@@ -520,8 +520,18 @@ async def run_analysis_async(job_id: str, target: str, mode: str, api_key: str):
         print(f"🤖 Initializing Market Research Agent for {target}")
         import os
         os.environ['TEAM_API_KEY'] = api_key
-        from agent import MarketResearchAgent
-        agent = MarketResearchAgent(target=target, mode=mode, api_key=api_key)
+        os.environ['HOME'] = '/tmp'
+        os.environ['XDG_CACHE_HOME'] = '/tmp/.cache'
+        os.environ['TMPDIR'] = '/tmp'
+        os.makedirs('/tmp/.cache', exist_ok=True)
+        # Change to /tmp to avoid read-only filesystem issues
+        original_cwd = os.getcwd()
+        os.chdir('/tmp')
+        try:
+            from agent import MarketResearchAgent
+            agent = MarketResearchAgent(target=target, mode=mode, api_key=api_key)
+        finally:
+            os.chdir(original_cwd)
         
         # Update progress
         job_store[job_id]["progress"]["agents_ready"] = True
